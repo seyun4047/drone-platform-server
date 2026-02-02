@@ -7,6 +7,8 @@ spring:
   docker:
     compose:
       enabled: false # local-> false docker->true
+server:
+  port: your server port
 ---
 # local
 spring:
@@ -23,7 +25,6 @@ spring:
       host: your redis host
       port: your redis port
       password: your redis password
-
 ---
 # docker
 spring:
@@ -37,6 +38,3 @@ spring:
       host: your redis host
       port: your redis port
       password: your redis password
-
-server:
-  port: your server port
