@@ -74,10 +74,11 @@ public class AuthService {
 
 ///        8.save Log
         Path logPath = LogPathCreator.create("logs/", serial, true);
-        drone.setLogPath(logPath.toString());
-        droneRepository.save(drone);
         LogAppender.prepend(logPath.toString(), "CONNECT");
 ///        9. Connecting Success
+        drone.setLogPath(logPath.toString());
+        drone.setUpdatedAt(LocalDateTime.now());
+        droneRepository.save(drone);
         return new AuthResponse(true, "SUCCESS_CONNECT", newToken);
     }
 
