@@ -58,37 +58,36 @@ By securing this critical **golden time**, the system enables faster decision-ma
 ## Architecture
 
 ### Overall System Architecture
+<img width="5823" height="3493" alt="Drone Redis Token Flow-2026-01-27-183514" src="https://github.com/user-attachments/assets/2693c67c-8110-4f79-86f5-22768663c5ae" />
 
-![Overall System Architecture](https://github.com/user-attachments/assets/2024b209-8287-4acf-bcb2-af9d57c9e743)
+
 
 ---
 
 ### 1. Auth Logic
 
 This component defines the authentication and connection control flow using Redis-based token management.
-
-![Auth Logic](https://github.com/user-attachments/assets/05b8c887-8fbc-4e45-9aeb-9a1486228f63)
+<img width="3354" height="5544" alt="Redis Token Connection Flow-2026-02-01-182531" src="https://github.com/user-attachments/assets/b8009568-1a80-4984-81c8-214d42184a3b" />
 
 ---
 
 ### 2. Control Data From Drone
 
 This flow describes how control and telemetry data are received and processed from drones after authentication.
+<img width="3310" height="8192" alt="Redis Token Connection Flow-2026-02-01-182619" src="https://github.com/user-attachments/assets/36e4ff61-dc58-4b36-8882-f9de81b189db" />
 
-![Control Data From Drone](https://github.com/user-attachments/assets/f2ec9ecc-cfca-4d9d-b95f-127644897329)
 
 ---
 
 ### 3. Token Validation for Data
 
 This process validates Redis tokens for incoming drone data to ensure integrity and authenticity.
-
-![Token Validation For Data](https://github.com/user-attachments/assets/65a040af-ae23-48ec-9344-8938a9e49704)
+<img width="2602" height="6167" alt="Redis Token Connection Flow-2026-02-01-182817" src="https://github.com/user-attachments/assets/6c8b5dd6-cf0c-4848-85a6-5272d951a176" />
 
 ---
 
 ### 4. Drone State Monitoring Server
 
 The monitoring server periodically checks drone connection states and maintains system consistency.
+<img width="1823" height="3419" alt="Redis Token Connection Flow-2026-02-01-182910" src="https://github.com/user-attachments/assets/592adb6b-9066-47ac-8f9d-d5117492a6af" />
 
-![Drone State Monitoring Server](https://github.com/user-attachments/assets/d4c4462f-f6eb-48e5-943b-5a1d15b440e3)
