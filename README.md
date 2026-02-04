@@ -67,22 +67,21 @@ By securing this critical **golden time**, the system enables faster decision-ma
 ### 1. Auth Logic
 
 This component defines the authentication and connection control flow using Redis-based token management.
-<img width="3354" height="5544" alt="Redis Token Connection Flow-2026-02-01-182531" src="https://github.com/user-attachments/assets/b8009568-1a80-4984-81c8-214d42184a3b" />
+<img width="3310" height="8192" alt="Redis Token Connection Flow-2026-02-01-182619" src="https://github.com/user-attachments/assets/cf0e6a9e-eeae-4525-aaf1-198c98e61c90" />
 
 ---
 
 ### 2. Control Data From Drone
 
 This flow describes how control and telemetry data are received and processed from drones after authentication.
-<img width="3310" height="8192" alt="Redis Token Connection Flow-2026-02-01-182619" src="https://github.com/user-attachments/assets/36e4ff61-dc58-4b36-8882-f9de81b189db" />
-
+<img width="2602" height="6167" alt="Redis Token Connection Flow-2026-02-01-182817" src="https://github.com/user-attachments/assets/669647c6-ee30-4bfb-baea-d02e306070ea" />
 
 ---
 
 ### 3. Token Validation for Data
 
 This process validates Redis tokens for incoming drone data to ensure integrity and authenticity.
-<img width="2602" height="6167" alt="Redis Token Connection Flow-2026-02-01-182817" src="https://github.com/user-attachments/assets/6c8b5dd6-cf0c-4848-85a6-5272d951a176" />
+<img width="3354" height="5544" alt="Redis Token Connection Flow-2026-02-01-182531" src="https://github.com/user-attachments/assets/456dc993-64a0-4ac8-9138-0f5446aaad07" />
 
 ---
 
