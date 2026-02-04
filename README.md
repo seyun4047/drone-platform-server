@@ -90,4 +90,4 @@ This process validates Redis tokens for incoming drone data to ensure integrity 
 
 The monitoring server periodically checks drone connection states and maintains system consistency.
 <img width="1823" height="3419" alt="Redis Token Connection Flow-2026-02-01-182910" src="https://github.com/user-attachments/assets/592adb6b-9066-47ac-8f9d-d5117492a6af" />
-
+ 
