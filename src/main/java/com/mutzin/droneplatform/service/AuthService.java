@@ -105,8 +105,7 @@ public class AuthService {
             droneRepository.save(drone);
 
             redisTokenRepository.deleteBySerial(serial);
-            System.out.println("Drone disconnected: " + serial);
-            return new AuthResponse(true, "DISCONNECT");
+            return new AuthResponse(true, "DISCONNECT:"+serial, token);
         }
         return new AuthResponse(false, "DISCONNECT ERROR", token);
     }
