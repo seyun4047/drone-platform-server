@@ -89,10 +89,10 @@ public class AuthService {
         Optional<Drone> optionalDrone = droneRepository.findBySerial(serial);
 
 ///         if you don't have monitoring server->cannot use this method(It can invalid->ghost session)
-//            if(token != redisTokenRepository.getTokenlBySerial(serial)){
-//            return "TOKEN INVALID";
-//            return new AuthResponse(false, "TOKEN INVALID", token);
-//        }
+        if(!token.equals(redisTokenRepository.getTokenlBySerial(serial))){
+        return new AuthResponse(false, "TOKEN INVALID", token);
+        }
+
         if(optionalDrone.isPresent()) {
             Drone drone = optionalDrone.get();
             drone.setConnecting(false);
