@@ -4,6 +4,19 @@ The project aims to be a **manufacturer-independent drone platform**, connecting
 
 ---
 
+## Project Structure
+
+This platform consists of multiple independent repositories:
+
+| Component | Description                                       | Repository                                                              |
+|---------|---------------------------------------------------|-------------------------------------------------------------------------|
+| Server | Core drone platform server (API, Auth, Telemetry) | [GitHub](https://github.com/seyun4047/drone-platform-server)            |
+| Monitoring Server | Real-time Drone health check monitoring service   | [GitHub](https://github.com/seyun4047/drone-platform-monitoring-server) |
+| Drone Data Tester | Test client for drone telemetry & data simulation | -                                                                       |
+| Drone Client | Drone Data Collection, Transmission & Analysis | -                                                                       |
+
+---
+
 ## Overview
 
 This project focuses on building a universal drone control and monitoring platform that can operate independently of drone manufacturers and hardware-specific constraints.
@@ -33,7 +46,6 @@ Based on this problem, the goal of this project is defined as follows:
 > **A universal drone control and monitoring platform that enables immediate deployment of any camera-equipped drone—including consumer drones—for life-saving and disaster response missions.**
 
 ---
-
 ## Objectives
 
 - A drone control and monitoring system deployable regardless of drone model or manufacturer
