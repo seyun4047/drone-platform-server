@@ -3,6 +3,7 @@ package com.mutzin.droneplatform.controller;
 import com.mutzin.droneplatform.dto.AuthRequest;
 import com.mutzin.droneplatform.dto.AuthResponse;
 import com.mutzin.droneplatform.service.AuthService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 ///  REST controller responsible for drone authentication and connection management.
@@ -33,9 +34,22 @@ public class AuthController {
     /// @return AuthResponse containing authentication result and connection status
     @PostMapping("/connect")
     public ResponseEntity<AuthResponse> connect(@RequestBody AuthRequest authRequest) {
-        AuthResponse result = authService.connectDrone(authRequest.getSerial(), authRequest.getDevice_name());
-        System.out.println("SUCCESS GET TELEMETRY: " + result);
-        return ResponseEntity.ok(result);
+        try {
+            AuthResponse result =
+                    authService.connectDrone(authRequest.getSerial(), authRequest.getDevice_name());
+            System.out.println(result);
+            return ResponseEntity.ok(result);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new AuthResponse(false, e.getMessage()));
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new AuthResponse(false, "INTERNAL_SERVER_ERROR"));
+        }
     }
 
     /// Handles drone disconnection requests.
@@ -46,7 +60,44 @@ public class AuthController {
     /// @return AuthResponse containing disconnection result
     @PostMapping("/disconnect")
     public ResponseEntity<AuthResponse> disconnect(@RequestBody AuthRequest authRequest) {
-        AuthResponse message = authService.disconnected(authRequest);
-        return ResponseEntity.ok(message);
+        try {
+            AuthResponse result = authService.disconnect(authRequest);
+            System.out.println(result);
+            return ResponseEntity.ok(result);
+
+        } catch (IllegalStateException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new AuthResponse(false, e.getMessage()));
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new AuthResponse(false, "INTERNAL_SERVER_ERROR"));
+        }
+    }
+
+    /// Handles drone token update requests.
+    /// - Updates the token.
+    ///
+    /// @param authRequest update drone request information
+    /// @return AuthResponse containing authentication result
+    @PostMapping("/update")
+    public ResponseEntity<AuthResponse> update(@RequestBody AuthRequest authRequest) {
+        try {
+            AuthResponse result = authService.update(authRequest);
+            System.out.println(result);
+            return ResponseEntity.ok(result);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new AuthResponse(false, e.getMessage()));
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new AuthResponse(false, "INTERNAL_SERVER_ERROR"));
+        }
     }
 }

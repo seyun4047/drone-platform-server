@@ -1,8 +1,11 @@
 package com.mutzin.droneplatform.service;
 
 import com.mutzin.droneplatform.domain.Drone;
+import com.mutzin.droneplatform.dto.AccessResult;
 import com.mutzin.droneplatform.dto.AuthRequest;
 import com.mutzin.droneplatform.dto.AuthResponse;
+import com.mutzin.droneplatform.dto.TelemetryResponse;
+import com.mutzin.droneplatform.infrastructure.accesguard.AccessGuard;
 import com.mutzin.droneplatform.infrastructure.logging.LogAppender;
 import com.mutzin.droneplatform.infrastructure.logging.LogPathCreator;
 import com.mutzin.droneplatform.repository.DroneRepository;
@@ -37,12 +40,15 @@ public class AuthService {
     private final DroneRepository droneRepository;
     private final RedisTokenRepository redisTokenRepository;
     private final long TOKEN_TTL_SECONDS = 3600;
+    private final AccessGuard accessGuard;
 
-    public AuthService(DroneRepository droneRepository, RedisTokenRepository redisTokenRepository){
+    public AuthService(DroneRepository droneRepository, RedisTokenRepository redisTokenRepository, AccessGuard accessGuard){
         this.droneRepository = droneRepository;
         this.redisTokenRepository = redisTokenRepository;
+        this.accessGuard = accessGuard;
     }
 
+///     Connect Drone
     @Transactional
     public AuthResponse connectDrone(String serial, String deviceName) {
 ///      1.  serial in DB?
@@ -65,8 +71,7 @@ public class AuthService {
             else return new AuthResponse(false, "DEVICE_ALREADY_CONNECTED");
         }
 ///        6. CREATE NEW TOKEN
-        String newToken = UUID.randomUUID().toString();
-        redisTokenRepository.saveToken(newToken, serial, TOKEN_TTL_SECONDS);
+        String newToken = redisTokenRepository.saveToken(serial, TOKEN_TTL_SECONDS);
 
 ///        7. DB UPDATE Connecting -> 1
         drone.setConnecting(true);
@@ -82,8 +87,9 @@ public class AuthService {
         return new AuthResponse(true, "SUCCESS_CONNECT", newToken);
     }
 
+///         Disconnect Drone
     @Transactional
-    public AuthResponse disconnected(AuthRequest authRequest) {
+    public AuthResponse disconnect(AuthRequest authRequest) {
         String serial = authRequest.getSerial();
         String token = authRequest.getToken();
         Optional<Drone> optionalDrone = droneRepository.findBySerial(serial);
@@ -105,4 +111,22 @@ public class AuthService {
         return new AuthResponse(false, "DISCONNECT ERROR", token);
     }
 
+///         Update Token
+    @Transactional
+    public AuthResponse update(AuthRequest authRequest) {
+        if (authRequest == null ||
+                authRequest.getSerial() == null ||
+                authRequest.getToken() == null) {
+            return new AuthResponse(false, "INVALID_REQUEST");
+        }
+        String serial = authRequest.getSerial();
+        String token = authRequest.getToken();
+        AccessResult accessResult = accessGuard.handle(token, serial);
+        if (!accessResult.isSuccess()) {
+            return new AuthResponse(false, accessResult.getMessage());
+        }
+        String newToken = redisTokenRepository.updateTokenBySerial(serial, TOKEN_TTL_SECONDS);
+        return new AuthResponse(true, "UPDATE TOKEN", newToken);
+    }
 }
+

@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.UUID;
 
 @Component
 public class RedisTokenRepository {
@@ -14,10 +15,12 @@ public class RedisTokenRepository {
         this.redisTemplate = redisTemplate;
     }
 
-    public void saveToken(String token, String serial, long ttlSeconds) {
+    public String saveToken(String serial, long ttlSeconds) {
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        String token = UUID.randomUUID().toString();
         ops.set(token, serial, Duration.ofSeconds(ttlSeconds));
         ops.set(serial, token, Duration.ofSeconds(ttlSeconds));
+        return token;
     }
     public String getSerialByToken(String token) {
         return redisTemplate.opsForValue().get(token);
@@ -42,4 +45,8 @@ public class RedisTokenRepository {
         redisTemplate.delete(serial);
     }
 
+    public String updateTokenBySerial(String serial, long ttlSeconds) {
+        deleteBySerial(serial);
+        return saveToken(serial, ttlSeconds);
+    }
 }
