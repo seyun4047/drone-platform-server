@@ -43,6 +43,7 @@ public class TelemetryService {
         if (req.getEvent() == 1) {
             String logPath = drone.getLogPath();
             LogAppender.prepend(logPath, req.toString());
+//            System.out.println(req.toString());
             droneEventStore.addEvent(req);
             return new TelemetryResponse(
                     true,
@@ -51,6 +52,7 @@ public class TelemetryService {
         }
 ////        req.event == 0 -> save telemetry data store
         droneStateStore.update(req);
+//        System.out.println(req.toString());
         return new TelemetryResponse(
                 true,
                 "UPDATE_TELEMETRY_serial: " + serial
