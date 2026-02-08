@@ -36,6 +36,15 @@ docker compose up --build
 # Stop and remove containers
 docker compose down
 ```
+---
+## Test
+### Flow Test with Mock Data
+```bash
+# Test
+./gradlew test
+```
+### Flow Test with Real Data
+> If you want to test with real drone data, check it out here: [Drone Data Tester](https://github.com/seyun4047/drone-platform-client)   
 
 ---
 ## Overview
