@@ -16,7 +16,28 @@ This platform consists of multiple independent repositories:
 | Drone Client | Drone Data Collection, Transmission & Analysis | [GitHub](https://github.com/seyun4047/drone-platform-client)            |
 
 ---
+## Usage
+### Local Build
+```bash
+# Export env
+export $(cat .env | xargs)
 
+# Build the project (Gradle)
+./gradlew build
+
+# Run locally with 'local' profile
+./gradlew bootRun --args='--spring.profiles.active=local'
+```
+### Docker Build
+```bash
+# Build Images and Start (MySQL, Redis, App)
+docker compose up --build
+
+# Stop and remove containers
+docker compose down
+```
+
+---
 ## Overview
 
 This project focuses on building a universal drone control and monitoring platform that can operate independently of drone manufacturers and hardware-specific constraints.
