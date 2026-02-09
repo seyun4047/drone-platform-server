@@ -3,6 +3,8 @@ package com.mutzin.droneplatform.controller;
 import com.mutzin.droneplatform.dto.AuthRequest;
 import com.mutzin.droneplatform.dto.AuthResponse;
 import com.mutzin.droneplatform.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 ///  This controller focuses only on HTTP request and response handling.
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication")
 public class AuthController {
     private final AuthService authService;
     /// Constructor-based dependency injection for AuthService.
@@ -32,6 +35,7 @@ public class AuthController {
     /// @param authRequest authentication request containing
     ///                    drone serial and device name
     /// @return AuthResponse containing authentication result and connection status
+    @Operation(summary = "Connect drone")
     @PostMapping("/connect")
     public ResponseEntity<AuthResponse> connect(@RequestBody AuthRequest authRequest) {
         try {
@@ -52,12 +56,15 @@ public class AuthController {
         }
     }
 
-    /// Handles drone disconnection requests.
-    /// - Terminates the drone connection.
-    /// - Updates the server-side connection state accordingly.
-    ///
+    ///     /// Handles drone disconnection requests.
+    ///     /// - Terminates the drone connection.
+    ///     /// - Updates the server-side connection state accordingly.
+    ///     ///
+    ///     /// @param authRequest disconnection request information
+    ///     /// @return AuthResponse containing disconnection result
     /// @param authRequest disconnection request information
     /// @return AuthResponse containing disconnection result
+    @Operation(summary = "Disconnect drone")
     @PostMapping("/disconnect")
     public ResponseEntity<AuthResponse> disconnect(@RequestBody AuthRequest authRequest) {
         try {
@@ -82,6 +89,7 @@ public class AuthController {
     ///
     /// @param authRequest update drone request information
     /// @return AuthResponse containing authentication result
+    @Operation(summary = "Update drone token")
     @PostMapping("/update")
     public ResponseEntity<AuthResponse> update(@RequestBody AuthRequest authRequest) {
         try {

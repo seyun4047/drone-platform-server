@@ -3,6 +3,8 @@ package com.mutzin.droneplatform.controller;
 import com.mutzin.droneplatform.dto.TelemetryRequest;
 import com.mutzin.droneplatform.dto.TelemetryResponse;
 import com.mutzin.droneplatform.service.TelemetryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Telemetry")
 public class TelemetryController {
 
     /// Constructor-based dependency injection for TelemetryService.
@@ -35,6 +38,7 @@ public class TelemetryController {
     ///
     /// @param telemetryRequest telemetry data sent by the drone
     /// @return TelemetryResponse containing processing result and status
+    @Operation(summary = "Receive telemetry data")
     @PostMapping("/telemetry")
     public ResponseEntity<TelemetryResponse> getTelemetry(
             @RequestBody TelemetryRequest telemetryRequest) {
