@@ -74,10 +74,7 @@ Such dependency is particularly critical in **life-saving and disaster response 
 ---
 
 ## Project Goal
-
-Based on this problem, the goal of this project is defined as follows:
-
-> **A universal drone control and monitoring platform that enables immediate deployment of any camera-equipped drone—including consumer drones—for life-saving and disaster response missions.**
+- A manufacturer-independent drone control platform that supports life-saving operations and disaster response.
 
 ---
 ## Objectives
