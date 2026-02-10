@@ -1,3 +1,4 @@
+
 # Manufacturer-Independent Drone Platform
 
 The project aims to be a **manufacturer-independent drone platform**, connecting various drone devices with standardized interfaces and performing **Redis-based authentication and status management**.
@@ -12,45 +13,11 @@ This platform consists of multiple independent repositories:
 |---------|---------------------------------------------------|-------------------------------------------------------------------------|
 | Server | Core drone platform server (API, Auth, Telemetry) | [GitHub](https://github.com/seyun4047/drone-platform-server)            |
 | Monitoring Server | Real-time Drone health check monitoring service   | [GitHub](https://github.com/seyun4047/drone-platform-monitoring-server) |
-| Drone Data Tester | Test client for drone telemetry & data simulation | [GitHub](https://github.com/seyun4047/drone-platform-trans-tester)            |
+| Drone Data Tester | Test client for drone telemetry & data simulation | [GitHub](https://github.com/seyun4047/drone-platform-trans-tester)       |
 | Drone Client | Drone Data Collection, Transmission & Analysis | [GitHub](https://github.com/seyun4047/drone-platform-client)            |
 
 ---
-## Usage
-### Local Build
-```bash
-# Export env
-export $(cat .env | xargs)
 
-# Build the project (Gradle)
-./gradlew build
-
-# Run locally with 'local' profile
-./gradlew bootRun --args='--spring.profiles.active=local'
-```
-### Docker Build
-```bash
-# Build Images and Start (MySQL, Redis, App)
-docker compose up --build
-
-# Stop and remove containers
-docker compose down
-```
----
-## Test
-### Flow Test with Mock Data
-```bash
-# Test
-./gradlew test
-```
-### Flow Test with Real Data
-> If you want to test with real drone data, check it out here: [Drone Data Tester](https://github.com/seyun4047/drone-platform-trans-tester)   
-
----
-## DB QUIDE
-### MYSQL DB USAGE QUIDE
->  If you want to know MySQL usage guide, check it out here: [DB GUIDE](https://github.com/seyun4047/drone-platform-server/blob/main/DBGUIDE.md)
----
 ## Overview
 
 This project focuses on building a universal drone control and monitoring platform that can operate independently of drone manufacturers and hardware-specific constraints.
@@ -72,7 +39,6 @@ However, these systems have clear limitations. They typically rely on tuning spe
 Such dependency is particularly critical in **life-saving and disaster response operations**.
 
 ---
-
 ## Project Goal
 - A manufacturer-independent drone control platform that supports life-saving operations and disaster response.
 
@@ -116,3 +82,46 @@ By securing this critical **golden time**, the system enables faster decision-ma
 |:---------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | <img src="https://github.com/user-attachments/assets/456dc993-64a0-4ac8-9138-0f5446aaad07" width="450"/>  | <img src="https://github.com/user-attachments/assets/592adb6b-9066-47ac-8f9d-d5117492a6af" width="450"/>  |
 |                          **Validation of Redis tokens for incoming drone data.**                          |                              **Periodic drone connection state monitoring.**                              |
+
+# Drone Platform Server
+---
+## Usage
+### Local Build
+```bash
+# Export env
+export $(cat .env | xargs)
+
+# Build the project (Gradle)
+./gradlew build
+
+# Run locally with 'local' profile
+./gradlew bootRun --args='--spring.profiles.active=local'
+```
+### Docker Build
+```bash
+# Build Images and Start (MySQL, Redis, App)
+docker compose up --build
+
+# Stop and remove containers
+docker compose down
+```
+---
+## Test
+### Flow Test with Mock Data
+```bash
+# Test
+./gradlew test
+```
+### Flow Test with Real Data
+> If you want to test with real drone data, check it out here: [Drone Data Tester](https://github.com/seyun4047/drone-platform-trans-tester)   
+
+---
+## DB QUIDE
+### MYSQL DB USAGE QUIDE
+>  If you want to know MySQL usage guide, check it out here: [DB GUIDE](https://github.com/seyun4047/drone-platform-server/blob/main/DBGUIDE.md)
+---
+## Overview
+
+This project focuses on building a universal drone control and monitoring platform that can operate independently of drone manufacturers and hardware-specific constraints.
+
+---
