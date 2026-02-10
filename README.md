@@ -37,11 +37,10 @@ docker compose down
 >  If you want to know MySQL usage guide, check it out here: [DB GUIDE](https://github.com/seyun4047/drone-platform-docs/blob/main/components/server/DB_GUIDE.md)
 ---
 
+---
 # PROJECT OVERVIEW
 # Manufacturer-Independent Drone Platform
-<!-- <details> -->
-<!-- <summary>Project Overview (Click to expand!)</summary> -->
-  
+---
 It is a **manufacturer-independent integrated drone monitoring platform!**
 
 It is designed to manage various drones within a single environment,
@@ -121,4 +120,3 @@ By securing this critical **golden time**, the system enables faster decision-ma
 |:---------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
 | <img src="https://github.com/user-attachments/assets/456dc993-64a0-4ac8-9138-0f5446aaad07" width="450"/>  | <img src="https://github.com/user-attachments/assets/592adb6b-9066-47ac-8f9d-d5117492a6af" width="450"/>  |
 |                          **Validation of Redis tokens for incoming drone data.**                          |                              **Periodic drone connection state monitoring.**                              |
-<!-- </details> -->
