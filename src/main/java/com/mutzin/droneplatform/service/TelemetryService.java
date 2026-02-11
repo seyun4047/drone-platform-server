@@ -7,6 +7,7 @@ import com.mutzin.droneplatform.dto.TelemetryResponse;
 import com.mutzin.droneplatform.infrastructure.accesguard.AccessGuard;
 import com.mutzin.droneplatform.infrastructure.logging.LogAppender;
 import com.mutzin.droneplatform.state.DroneEventStore;
+import com.mutzin.droneplatform.repository.RedisHeartbeatRepository;
 import com.mutzin.droneplatform.state.DroneStateStore;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,15 +18,17 @@ public class TelemetryService {
     private final DroneStateStore droneStateStore;
     private final DroneEventStore droneEventStore;
     private final AccessGuard accessGuard;
+    private final RedisHeartbeatRepository redisHeartbeatRepository;
 
     public TelemetryService(
             DroneStateStore droneStateStore,
             DroneEventStore droneEventStore,
-            AccessGuard accessGuard
+            AccessGuard accessGuard, RedisHeartbeatRepository redisHeartbeatRepository
     ) {
         this.droneStateStore = droneStateStore;
         this.droneEventStore = droneEventStore;
         this.accessGuard = accessGuard;
+        this.redisHeartbeatRepository = redisHeartbeatRepository;
     }
 
     @Transactional
@@ -37,7 +40,8 @@ public class TelemetryService {
         if (!accessResult.isSuccess()) {
             return new TelemetryResponse(false, accessResult.getMessage());
         }
-
+//        UPDATE HEARTBEAT
+        redisHeartbeatRepository.heartbeat(serial);
         Drone drone = accessResult.getDrone();
 ////        req.event == 1 -> save event data store
         if (req.getEvent() == 1) {

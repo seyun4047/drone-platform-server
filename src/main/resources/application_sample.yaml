@@ -9,6 +9,8 @@ spring:
       enabled: false # local-> false docker->true
 server:
   port: your server port
+drone:
+  ttl: 60 #sec (1min)
 ---
 # local
 spring:
