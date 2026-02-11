@@ -10,6 +10,7 @@ import com.mutzin.droneplatform.infrastructure.logging.LogAppender;
 import com.mutzin.droneplatform.infrastructure.logging.LogPathCreator;
 import com.mutzin.droneplatform.repository.DroneRepository;
 import com.mutzin.droneplatform.repository.RedisTokenRepository;
+import com.mutzin.droneplatform.repository.RedisHeartbeatRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,11 +42,13 @@ public class AuthService {
     private final RedisTokenRepository redisTokenRepository;
     private final long TOKEN_TTL_SECONDS = 3600;
     private final AccessGuard accessGuard;
+    private final RedisHeartbeatRepository redisHeartbeatRepository;
 
-    public AuthService(DroneRepository droneRepository, RedisTokenRepository redisTokenRepository, AccessGuard accessGuard){
+    public AuthService(DroneRepository droneRepository, RedisTokenRepository redisTokenRepository, AccessGuard accessGuard, RedisHeartbeatRepository redisHeartbeatRepository){
         this.droneRepository = droneRepository;
         this.redisTokenRepository = redisTokenRepository;
         this.accessGuard = accessGuard;
+        this.redisHeartbeatRepository = redisHeartbeatRepository;
     }
 
 ///     Connect Drone
@@ -84,6 +87,8 @@ public class AuthService {
         drone.setLogPath(logPath.toString());
         drone.setUpdatedAt(LocalDateTime.now());
         droneRepository.save(drone);
+        //        UPDATE HEARTBEAT
+        redisHeartbeatRepository.heartbeat(serial);
         return new AuthResponse(true, "SUCCESS_CONNECT", newToken);
     }
 
@@ -107,6 +112,8 @@ public class AuthService {
             redisTokenRepository.deleteBySerial(serial);
             return new AuthResponse(true, "DISCONNECT:"+serial, token);
         }
+        Path logPath = LogPathCreator.create("logs/", serial, true);
+        LogAppender.prepend(logPath.toString(), "DISCONNECT");
         return new AuthResponse(false, "DISCONNECT ERROR", token);
     }
 
@@ -125,6 +132,8 @@ public class AuthService {
             return new AuthResponse(false, accessResult.getMessage());
         }
         String newToken = redisTokenRepository.updateTokenBySerial(serial, TOKEN_TTL_SECONDS);
+        //        UPDATE HEARTBEAT
+        redisHeartbeatRepository.heartbeat(serial);
         return new AuthResponse(true, "UPDATE TOKEN", newToken);
     }
 }
