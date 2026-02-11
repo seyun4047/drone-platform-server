@@ -1,7 +1,7 @@
 
 # Drone Platform Server
 ---
-## Overall
+## Overview
 The Drone Platform Server is the core backend service of the Manufacturer-Independent Drone Platform.<br>
 
 It is responsible for managing the entire lifecycle of drone sessions, authentication, <br>telemetry processing, and high-volume request handling across the platform.<br>
