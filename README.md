@@ -1,6 +1,35 @@
 
 # Drone Platform Server
 ---
+## Overall
+The Drone Platform Server is the core backend service of the Manufacturer-Independent Drone Platform.<br>
+
+It is responsible for managing the entire lifecycle of drone sessions, authentication, <br>telemetry processing, and high-volume request handling across the platform.<br>
+
+This server acts as the central coordination layer between drones, data storage systems, and external services.
+
+---
+
+## Core Responsibilities
+
+### 1. Drone Authentication & Session Management
+The server manages secure and scalable drone sessions using:
+- Authorized Drone Database (MySQL)
+Maintains the list of registered and approved drones.
+- Drone Authentication Tokens (Redis)
+Issues and validates access tokens for authenticated drones.
+- Drone Heartbeat Tracking (Redis)
+Tracks real-time connectivity status using time-indexed heartbeat data.
+
+### 2. Telemetry & Event Processing
+The server receives and processes telemetry and event data transmitted from drone-[client](https://github.com/seyun4047/drone-platform-client), including:
+- Telemetry Data
+Processes real-time operational status data from active drones.
+- Event Data
+Processes event data, such as person detection and other mission-triggered activities.
+
+---
+
 ## Usage
 ### Local Build
 ```bash
