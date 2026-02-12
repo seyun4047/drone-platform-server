@@ -1,6 +1,10 @@
 
 # Drone Platform Server
 ---
+
+### [KOREAN GUIDE](https://github.com/seyun4047/drone-platform-docs/blob/main/components/server/server.md)
+
+---
 ## Overview
 The Drone Platform Server is the core backend service of the Manufacturer-Independent Drone Platform.<br>
 
@@ -72,6 +76,11 @@ docker compose down
 # PROJECT OVERVIEW
 # Manufacturer-Independent Drone Platform
 ---
+
+### [KOREAN GUIDE](https://github.com/seyun4047/drone-platform-docs/blob/main/components/platform/overview.kr.md)
+
+---
+
 It is a **manufacturer-independent integrated drone monitoring platform!**
 
 It is designed to manage various drones within a single environment,
