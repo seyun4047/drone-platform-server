@@ -1,8 +1,9 @@
 
-# Drone Platform Server
+원본보기: [ENGLISH GUIDE](https://github.com/seyun4047/drone-platform-docs/blob/main/components/server/server.md)
+
 ---
 
-### [KOREAN GUIDE](https://github.com/seyun4047/drone-platform-docs/blob/main/components/server/server.md)
+# Drone Platform Server
 
 ---
 ## Overview
@@ -75,12 +76,8 @@ docker compose down
 
 # PROJECT OVERVIEW
 # Manufacturer-Independent Drone Platform
----
-
-### [KOREAN GUIDE](https://github.com/seyun4047/drone-platform-docs/blob/main/components/platform/overview.kr.md)
 
 ---
-
 It is a **manufacturer-independent integrated drone monitoring platform!**
 
 It is designed to manage various drones within a single environment,
