@@ -8,5 +8,10 @@ public class TelemetryRequest {
     private String serial;
     private String device;
     private String token;
+    private String updatedAt;
     private Map<String, Object> data;
+
+    public TelemetryRequest() {
+        this.updatedAt = String.valueOf(System.currentTimeMillis());
+    }
 }

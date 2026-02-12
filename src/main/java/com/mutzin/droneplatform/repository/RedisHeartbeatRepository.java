@@ -48,4 +48,18 @@ public class RedisHeartbeatRepository {
         return redisTemplate.opsForZSet()
                 .rangeByScore(HEARTBEAT_ZSET, 0, threshold);
     }
+
+    /**
+     * Find alive drones (heartbeat within timeoutSeconds)
+     * return [serials]
+     */
+public Set<String> findAliveDrones(long timeoutSeconds) {
+    long now = Instant.now().getEpochSecond();
+    long threshold = now - timeoutSeconds;
+//    log.info("now={}, threshold={}, timeoutSeconds={}", now, threshold, timeoutSeconds);
+    Set<String> result = redisTemplate.opsForZSet()
+            .rangeByScore(HEARTBEAT_ZSET, threshold, Double.POSITIVE_INFINITY);
+//    log.info("alive drones: {}", result);
+    return result;
+}
 }

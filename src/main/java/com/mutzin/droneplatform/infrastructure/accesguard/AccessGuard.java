@@ -3,12 +3,8 @@ package com.mutzin.droneplatform.infrastructure.accesguard;
 
 import com.mutzin.droneplatform.domain.Drone;
 import com.mutzin.droneplatform.dto.AccessResult;
-import com.mutzin.droneplatform.dto.TelemetryRequest;
-import com.mutzin.droneplatform.dto.TelemetryResponse;
 import com.mutzin.droneplatform.repository.DroneRepository;
 import com.mutzin.droneplatform.repository.RedisTokenRepository;
-import com.mutzin.droneplatform.state.DroneEventStore;
-import com.mutzin.droneplatform.state.DroneStateStore;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

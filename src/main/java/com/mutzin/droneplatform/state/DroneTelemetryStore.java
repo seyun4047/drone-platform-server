@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class DroneStateStore {
+public class DroneTelemetryStore {
 
     private final Map<String, TelemetryRequest> latest = new ConcurrentHashMap<>();
 

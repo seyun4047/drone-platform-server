@@ -17,6 +17,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/telemetry").permitAll()
                         .requestMatchers("/auth/*").permitAll()
+                        .requestMatchers("/api/dashboard/*").permitAll()
+                        .requestMatchers("/api/dashboard/drone/event/*").permitAll()
+                        .requestMatchers("/api/dashboard/drone/telemetry/*").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
                 );

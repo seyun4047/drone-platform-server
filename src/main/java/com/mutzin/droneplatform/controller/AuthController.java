@@ -56,12 +56,9 @@ public class AuthController {
         }
     }
 
-    ///     /// Handles drone disconnection requests.
-    ///     /// - Terminates the drone connection.
-    ///     /// - Updates the server-side connection state accordingly.
-    ///     ///
-    ///     /// @param authRequest disconnection request information
-    ///     /// @return AuthResponse containing disconnection result
+    /// Handles drone disconnection requests.
+    /// - Terminates the drone connection.
+    /// - Updates the server-side connection state accordingly.
     /// @param authRequest disconnection request information
     /// @return AuthResponse containing disconnection result
     @Operation(summary = "Disconnect drone")
