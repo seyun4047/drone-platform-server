@@ -3,76 +3,72 @@
 
 ---
 
-Korean version: [한국어 문서](https://github.com/seyun4047/drone-platform-docs/blob/main/components/server/server.kr.md)
+# 드론 플랫폼 서버
+
+---
+## 개요
+드론 플랫폼 서버는 제조사 독립적인 드론 플랫폼의 핵심 백엔드 서비스입니다.<br>
+
+드론 세션의 전체 수명 주기, 인증, <br>텔레메트리 처리 및 플랫폼 전반에 걸친 대량 요청 처리를 담당합니다.<br>
+
+이 서버는 드론, 데이터 저장 시스템 및 외부 서비스 간의 중앙 조정 계층 역할을 합니다.
 
 ---
 
-# Drone Platform Server
+## 핵심 책임
 
----
-## Overview
-The Drone Platform Server is the core backend service of the Manufacturer-Independent Drone Platform.<br>
+### 1. 드론 인증 및 세션 관리
+서버는 다음을 사용하여 안전하고 확장 가능한 드론 세션을 관리합니다.
+- 승인된 드론 데이터베이스 (MySQL)
+등록되고 승인된 드론 목록을 유지 관리합니다.
+- 드론 인증 토큰 (Redis)
+인증된 드론에 대한 액세스 토큰을 발급하고 검증합니다.
+- 드론 하트비트 추적 (Redis)
+시간별 인덱싱된 하트비트 데이터를 사용하여 실시간 연결 상태를 추적합니다.
 
-It is responsible for managing the entire lifecycle of drone sessions, authentication, <br>telemetry processing, and high-volume request handling across the platform.<br>
-
-This server acts as the central coordination layer between drones, data storage systems, and external services.
-
----
-
-## Core Responsibilities
-
-### 1. Drone Authentication & Session Management
-The server manages secure and scalable drone sessions using:
-- Authorized Drone Database (MySQL)
-Maintains the list of registered and approved drones.
-- Drone Authentication Tokens (Redis)
-Issues and validates access tokens for authenticated drones.
-- Drone Heartbeat Tracking (Redis)
-Tracks real-time connectivity status using time-indexed heartbeat data.
-
-### 2. Telemetry & Event Processing
-The server receives and processes telemetry and event data transmitted from [drone-client](https://github.com/seyun4047/drone-platform-client), including:
-- Telemetry Data
-Processes real-time operational status data from active drones.
-- Event Data
-Processes event data, such as Human detection and other mission-triggered activities.
+### 2. 텔레메트리 및 이벤트 처리
+서버는 [drone-client](https://github.com/seyun4047/drone-platform-client)에서 전송되는 텔레메트리 및 이벤트 데이터를 수신하고 처리합니다. 여기에는 다음이 포함됩니다.
+- 텔레메트리 데이터
+활성 드론의 실시간 운영 상태 데이터를 처리합니다.
+- 이벤트 데이터
+인간 감지 및 기타 임무 트리거 활동과 같은 이벤트 데이터를 처리합니다.
 
 ---
 
-## Usage
-### Local Build
+## 사용법
+### 로컬 빌드
 ```bash
-# Export env
+# 환경 변수 설정
 export $(cat .env | xargs)
 
-# Build the project (Gradle)
+# 프로젝트 빌드 (Gradle)
 ./gradlew build
 
-# Run locally with 'local' profile
+# 'local' 프로필로 로컬 실행
 ./gradlew bootRun --args='--spring.profiles.active=local'
 ```
-### Docker Build
+### Docker 빌드
 ```bash
-# Build Images and Start (MySQL, Redis, App)
+# 이미지 빌드 및 시작 (MySQL, Redis, App)
 docker compose up --build
 
-# Stop and remove containers
+# 컨테이너 중지 및 제거
 docker compose down
 ```
 ---
-## Test
-### Flow Test with Mock Data
+## 테스트
+### Mock 데이터를 사용한 흐름 테스트
 ```bash
-# Test
+# 테스트 실행
 ./gradlew test
 ```
-### Flow Test with Real Data
-> If you want to test with real drone data, check it out here: [Drone Data Tester](https://github.com/seyun4047/drone-platform-trans-tester)   
+### 실제 데이터를 사용한 흐름 테스트
+> 실제 드론 데이터로 테스트하려면 여기를 확인하세요: [Drone Data Tester](https://github.com/seyun4047/drone-platform-trans-tester)   
 
 ---
-## DB QUIDE
-### MYSQL DB USAGE QUIDE
->  If you want to know MySQL usage guide, check it out here: [DB GUIDE](https://github.com/seyun4047/drone-platform-docs/blob/main/components/server/DB_GUIDE.md)
+## DB 가이드
+### MySQL DB 사용 가이드
+> MySQL 사용 가이드를 보려면 여기를 확인하세요: [DB GUIDE](https://github.com/seyun4047/drone-platform-docs/blob/main/components/server/DB_GUIDE.md)
 ---
 
 ---
