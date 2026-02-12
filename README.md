@@ -22,7 +22,7 @@ Issues and validates access tokens for authenticated drones.
 Tracks real-time connectivity status using time-indexed heartbeat data.
 
 ### 2. Telemetry & Event Processing
-The server receives and processes telemetry and event data transmitted from drone-[client](https://github.com/seyun4047/drone-platform-client), including:
+The server receives and processes telemetry and event data transmitted from [drone-client](https://github.com/seyun4047/drone-platform-client), including:
 - Telemetry Data
 Processes real-time operational status data from active drones.
 - Event Data
