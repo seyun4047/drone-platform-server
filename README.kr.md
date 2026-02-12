@@ -1,36 +1,40 @@
 
 # Drone Platform Server
 ---
-## Overview
-The Drone Platform Server is the core backend service of the Manufacturer-Independent Drone Platform.<br>
+## 개요
+Drone Platform Server는 제조사 독립형 드론 플랫폼(Manufacturer-Independent Drone Platform)의 핵심 백엔드 서비스입니다.<br>
 
-It is responsible for managing the entire lifecycle of drone sessions, authentication, <br>telemetry processing, and high-volume request handling across the platform.<br>
+이 서버는 드론 세션의 전체 라이프사이클 관리, 인증 처리, 텔레메트리 데이터 처리, 그리고 대규모 요청 처리 전반을 담당합니다.<br>
 
-This server acts as the central coordination layer between drones, data storage systems, and external services.
-
----
-
-## Core Responsibilities
-
-### 1. Drone Authentication & Session Management
-The server manages secure and scalable drone sessions using:
-- Authorized Drone Database (MySQL)
-Maintains the list of registered and approved drones.
-- Drone Authentication Tokens (Redis)
-Issues and validates access tokens for authenticated drones.
-- Drone Heartbeat Tracking (Redis)
-Tracks real-time connectivity status using time-indexed heartbeat data.
-
-### 2. Telemetry & Event Processing
-The server receives and processes telemetry and event data transmitted from [drone-client](https://github.com/seyun4047/drone-platform-client), including:
-- Telemetry Data
-Processes real-time operational status data from active drones.
-- Event Data
-Processes event data, such as Human detection and other mission-triggered activities.
+드론, 데이터 저장소, 외부 서비스 간의 중앙 조정 계층(Central Coordination Layer) 역할을 수행합니다.
 
 ---
 
-## Usage
+## 주요 기능
+
+### 1. 드론 인증 및 세션 관리
+서버는 안전하고 확장 가능한 드론 세션 관리를 위해 다음을 사용합니다:
+
+- Authorized Drone Database (MySQL)  
+  등록 및 승인된 드론 목록을 관리합니다.
+
+- Drone Authentication Tokens (Redis)  
+  인증된 드론에 대한 액세스 토큰을 발급하고 검증합니다.
+
+- Drone Heartbeat Tracking (Redis)  
+  시간 기반 Heartbeat 데이터를 활용하여 드론의 실시간 연결 상태를 추적합니다.
+
+### 2. 텔레메트리 및 이벤트 처리
+서버는 [drone-client](https://github.com/seyun4047/drone-platform-client)로부터 전송되는 텔레메트리 및 이벤트 데이터를 수신하고 처리합니다:
+
+- Telemetry Data  
+  활성 드론의 실시간 운용 상태 데이터를 처리합니다.
+
+- Event Data  
+  사람 탐지 등 운용중 발생하는 이벤트 데이터를 처리합니다.
+---
+
+## 사용법
 ### Local Build
 ```bash
 # Export env
@@ -51,19 +55,19 @@ docker compose up --build
 docker compose down
 ```
 ---
-## Test
-### Flow Test with Mock Data
+## 테스트 방법
+### 모의 데이터를 활용한 플로우 테스트
 ```bash
 # Test
 ./gradlew test
 ```
-### Flow Test with Real Data
-> If you want to test with real drone data, check it out here: [Drone Data Tester](https://github.com/seyun4047/drone-platform-trans-tester)   
+### 실제 데이터를 활용한 플로우 테스트
+> 실 데이터를 활용한 플로우 테스트를 위한 데이터 전송기는 다음 레포지토리에서 확인가능합니다. : [Drone Data Tester](https://github.com/seyun4047/drone-platform-trans-tester)   
 
 ---
-## DB QUIDE
-### MYSQL DB USAGE QUIDE
->  If you want to know MySQL usage guide, check it out here: [DB GUIDE](https://github.com/seyun4047/drone-platform-docs/blob/main/components/server/DB_GUIDE.md)
+## DB 가이드
+### MYSQL DB 사용 가이드
+>  MySQL 사용 사이드는 다음 레포지토리에서 확인 가능합니다. : [DB GUIDE](https://github.com/seyun4047/drone-platform-docs/blob/main/components/server/DB_GUIDE.md)
 ---
 
 
