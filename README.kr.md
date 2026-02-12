@@ -3,6 +3,10 @@
 
 ---
 
+Korean version: [한국어 문서](https://github.com/seyun4047/drone-platform-docs/blob/main/components/server/server.kr.md)
+
+---
+
 # Drone Platform Server
 
 ---
