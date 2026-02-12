@@ -26,7 +26,7 @@ The server receives and processes telemetry and event data transmitted from dron
 - Telemetry Data
 Processes real-time operational status data from active drones.
 - Event Data
-Processes event data, such as person detection and other mission-triggered activities.
+Processes event data, such as Human detection and other mission-triggered activities.
 
 ---
 
