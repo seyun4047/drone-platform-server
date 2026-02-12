@@ -1,10 +1,7 @@
 package com.mutzin.droneplatform.service;
 
 import com.mutzin.droneplatform.domain.Drone;
-import com.mutzin.droneplatform.dto.AccessResult;
-import com.mutzin.droneplatform.dto.AuthRequest;
-import com.mutzin.droneplatform.dto.AuthResponse;
-import com.mutzin.droneplatform.dto.TelemetryResponse;
+import com.mutzin.droneplatform.dto.*;
 import com.mutzin.droneplatform.infrastructure.accesguard.AccessGuard;
 import com.mutzin.droneplatform.infrastructure.logging.LogAppender;
 import com.mutzin.droneplatform.infrastructure.logging.LogPathCreator;
@@ -85,7 +82,6 @@ public class AuthService {
         LogAppender.prepend(logPath.toString(), "CONNECT");
 ///        9. Connecting Success
         drone.setLogPath(logPath.toString());
-        drone.setUpdatedAt(LocalDateTime.now());
         droneRepository.save(drone);
         //        UPDATE HEARTBEAT
         redisHeartbeatRepository.heartbeat(serial);
@@ -127,9 +123,9 @@ public class AuthService {
         }
         String serial = authRequest.getSerial();
         String token = authRequest.getToken();
-        AccessResult accessResult = accessGuard.handle(token, serial);
-        if (!accessResult.isSuccess()) {
-            return new AuthResponse(false, accessResult.getMessage());
+        AccessResult AccessResult = accessGuard.handle(token, serial);
+        if (!AccessResult.isSuccess()) {
+            return new AuthResponse(false, AccessResult.getMessage());
         }
         String newToken = redisTokenRepository.updateTokenBySerial(serial, TOKEN_TTL_SECONDS);
         //        UPDATE HEARTBEAT

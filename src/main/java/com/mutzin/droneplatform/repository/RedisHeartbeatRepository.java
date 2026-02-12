@@ -1,6 +1,7 @@
 package com.mutzin.droneplatform.repository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,9 @@ public class RedisHeartbeatRepository {
         this.redisTemplate = redisTemplate;
     }
 
+    @Value("${drone.ttl}")
+    private long TTL;
+//    =Long.parseLong(TTL)
     /**
      * Create or refresh heartbeat.
      * Updates the timestamp in ZSET.
@@ -42,24 +46,38 @@ public class RedisHeartbeatRepository {
      * Find drones that exceeded heartbeat timeout.
      * Used by monitoring server.
      */
-    public Set<String> findTimeoutDrones(long timeoutSeconds) {
-        long threshold = Instant.now().getEpochSecond() - timeoutSeconds;
+    public Set<String> findTimeoutDrones() {
+        long threshold = Instant.now().getEpochSecond() - TTL;
 
         return redisTemplate.opsForZSet()
                 .rangeByScore(HEARTBEAT_ZSET, 0, threshold);
     }
 
     /**
-     * Find alive drones (heartbeat within timeoutSeconds)
+     * Find alive drones (heartbeat)
      * return [serials]
      */
-public Set<String> findAliveDrones(long timeoutSeconds) {
-    long now = Instant.now().getEpochSecond();
-    long threshold = now - timeoutSeconds;
-//    log.info("now={}, threshold={}, timeoutSeconds={}", now, threshold, timeoutSeconds);
-    Set<String> result = redisTemplate.opsForZSet()
-            .rangeByScore(HEARTBEAT_ZSET, threshold, Double.POSITIVE_INFINITY);
-//    log.info("alive drones: {}", result);
-    return result;
-}
+    public Set<String> findAliveDrones() {
+        long now = Instant.now().getEpochSecond();
+        long threshold = now - TTL;
+    //    log.info("now={}, threshold={}, timeoutSeconds={}", now, threshold, timeoutSeconds);
+        Set<String> result = redisTemplate.opsForZSet()
+                .rangeByScore(HEARTBEAT_ZSET, threshold, Double.POSITIVE_INFINITY);
+    //    log.info("alive drones: {}", result);
+        return result;
+    }
+
+    public boolean isAlive(String serial) {
+        Double lastSeen = redisTemplate.opsForZSet()
+                .score(HEARTBEAT_ZSET, serial);
+
+        if (lastSeen == null) {
+            return false;
+        }
+
+        long now = Instant.now().getEpochSecond();
+        long threshold = now - TTL;
+
+        return lastSeen >= threshold;
+    }
 }

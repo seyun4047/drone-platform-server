@@ -27,8 +27,8 @@ public class DashboardController {
      /// @return serials
     @Operation(summary = "Alive drone")
     @GetMapping("/alive-drones")
-    public Set<String> getAliveDrones(@RequestParam(defaultValue = "10") long timeoutSeconds) {
-        return heartbeatRepo.findAliveDrones(timeoutSeconds);
+    public Set<String> getAliveDrones() {
+        return heartbeatRepo.findAliveDrones();
     }
 
     /// Get drone's Event data

@@ -20,7 +20,6 @@ public class AccessResult {
     public static AccessResult success(Drone drone) {
         return new AccessResult(true, "ACCESS COMPLETE", drone);
     }
-
     public boolean isSuccess() {
         return success;
     }

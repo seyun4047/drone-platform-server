@@ -2,6 +2,7 @@ package com.mutzin.droneplatform.service;
 
 import com.mutzin.droneplatform.domain.Drone;
 import com.mutzin.droneplatform.dto.AccessResult;
+import com.mutzin.droneplatform.dto.AccessResult;
 import com.mutzin.droneplatform.dto.TelemetryRequest;
 import com.mutzin.droneplatform.dto.TelemetryResponse;
 import com.mutzin.droneplatform.infrastructure.accesguard.AccessGuard;
@@ -36,13 +37,13 @@ public class TelemetryService {
         String token = req.getToken();
         String serial = req.getSerial();
 //      Valid Access
-        AccessResult accessResult = accessGuard.handle(token, serial);
-        if (!accessResult.isSuccess()) {
-            return new TelemetryResponse(false, accessResult.getMessage());
+        AccessResult AccessResult= accessGuard.handle(token, serial);
+        if (!AccessResult.isSuccess()) {
+            return new TelemetryResponse(false, AccessResult.getMessage());
         }
 //        UPDATE HEARTBEAT
         redisHeartbeatRepository.heartbeat(serial);
-        Drone drone = accessResult.getDrone();
+        Drone drone = AccessResult.getDrone();
 ////        req.event == 1 -> save event data store
         if (req.getEvent() == 1) {
             String logPath = drone.getLogPath();
