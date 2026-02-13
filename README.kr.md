@@ -6,46 +6,46 @@
 
 ---
 ## 개요
-드론 플랫폼 서버는 제조사 독립형 드론 플랫폼의 핵심 백엔드 서비스입니다.
+드론 플랫폼 서버는 제조사 독립형 드론 플랫폼의 핵심 백엔드 서비스입니다.<br>
 
-이 서버는 드론 세션의 전체 수명 주기 관리, 인증, 텔레메트리 처리, 그리고 플랫폼 전반의 대용량 요청 처리를 담당합니다.
+이 서버는 플랫폼 전반에 걸쳐 드론 세션 관리, 인증, 텔레메트리 처리, 그리고 대량 요청 처리를 포함한 드론의 전체 라이프사이클을 관리합니다.<br>
 
-이 서버는 드론, 데이터 저장 시스템, 외부 서비스 간의 중앙 조정 계층 역할을 합니다.
+이 서버는 드론, 데이터 저장 시스템 및 외부 서비스 간의 중앙 조정 계층 역할을 합니다.
 
 ---
 
-## 핵심 책임
+## 핵심 역할
 
 ### 1. 드론 인증 및 세션 관리
 서버는 다음을 사용하여 안전하고 확장 가능한 드론 세션을 관리합니다:
-- **승인된 드론 데이터베이스 (MySQL)**<br>
-등록되고 승인된 드론 목록을 유지 관리합니다.
-- **드론 인증 토큰 (Redis)**<br>
-인증된 드론을 위한 접근 토큰을 발행하고 유효성을 검사합니다.
-- **드론 Heartbeat 추적 (Redis)**<br>
-시간 기반 하트비트 데이터를 사용하여 실시간 연결 상태를 추적합니다.
+- 승인된 드론 데이터베이스 (MySQL)<br>
+등록되고 승인된 드론 목록을 유지합니다.
+- 드론 인증 토큰 (Redis)<br>
+인증된 드론에 대한 접근 토큰을 발급하고 유효성을 검사합니다.
+- 드론 심박수 추적 (Redis)<br>
+시간 색인화된 심박수 데이터를 사용하여 실시간 연결 상태를 추적합니다.
 
 ### 2. 텔레메트리 및 이벤트 처리
-서버는 [drone-client](https://github.com/seyun4047/drone-platform-client)에서 전송되는 텔레메트리 및 이벤트 데이터를 수신하고 처리합니다:
-- **텔레메트리 데이터**<br>
-활성 드론으로부터 실시간 운영 상태 데이터를 처리합니다.
-- **이벤트 데이터**<br>
+서버는 [drone-client](https://github.com/seyun4047/drone-platform-client)에서 전송되는 텔레메트리 및 이벤트 데이터를 수신하고 처리하며, 다음을 포함합니다:
+- 텔레메트리 데이터<br>
+활성 드론의 실시간 운영 상태 데이터를 처리합니다.
+- 이벤트 데이터<br>
 인간 감지 및 기타 임무 트리거 활동과 같은 이벤트 데이터를 처리합니다.
 
 ### 3. 대시보드 인증
 서버는 대시보드 접근을 위한 사용자 등록 및 승인을 처리합니다:
-- **사용자 등록 및 승인 워크플로우**<br>
+- 사용자 등록 및 승인 워크플로우<br>
 사용자는 대시보드 접근을 위해 등록할 수 있습니다. 승인된 사용자만 로그인할 수 있습니다.
-- **접근 제어 강제 적용**<br>
-인증 및 승인된 사용자만이 대시보드 API에 접근할 수 있도록 하여 데이터 무결성과 개인 정보 보호를 보장합니다.
+- 접근 제어 적용<br>
+인증되고 승인된 사용자만 대시보드 API에 접근할 수 있어 데이터 무결성과 개인 정보 보호를 보장합니다.
 
 ### 4. 대시보드 API 접근
 서버는 웹 대시보드 및 기타 프론트엔드 클라이언트를 위해 안전한 JWT 기반 접근을 제공합니다:
-- **JWT 토큰 생성 및 검증**<br>
-성공적인 로그인 시, 서버는 클라이언트가 API 요청에 포함해야 하는 JWT 토큰을 발행합니다.<br>서버는 모든 보호된 엔드포인트에 대해 토큰의 유효성을 검사합니다.
-- **보안 대시보드 엔드포인트**<br>
-  - Redis 하트비트 데이터에서 활성 드론을 가져옵니다.
-  - 드론에 대한 최신 텔레메트리 및 이벤트 데이터를 검색합니다.
+- JWT 토큰 생성 및 검증<br>
+성공적인 로그인 시, 서버는 클라이언트가 API 요청에 포함해야 하는 JWT 토큰을 발급합니다.<br>서버는 모든 보호된 엔드포인트에 대해 토큰의 유효성을 검사합니다.
+보안 대시보드 엔드포인트<br>
+- Redis 심박수 데이터에서 활성 드론 가져오기.
+- 드론의 최신 텔레메트리 및 이벤트 데이터 검색.
 
 ---
 ## 사용법
@@ -69,53 +69,52 @@ docker compose up --build
 docker compose down
 ```
 ---
-## 테스트-드론 데이터
-### Mock 드론 데이터로 흐름 테스트
+## 드론 데이터 테스트
+### 모의 드론 데이터로 흐름 테스트
 ```bash
 # Test
 ./gradlew test
 ```
 ### 실제 드론 데이터로 흐름 테스트
-> 실제 드론 데이터로 테스트하려면 여기를 확인하세요: [Drone Data Tester](https://github.com/seyun4047/drone-platform-trans-tester)
+> 실제 드론 데이터로 테스트하고 싶다면, 여기를 참조하세요: [Drone Data Tester](https://github.com/seyun4047/drone-platform-trans-tester)   
 
-## 테스트-대시보드 인증
+## 대시보드 인증 테스트
 ### 실제 사용자 데이터로 흐름 테스트
 ```bash
-# register
+# 회원가입
 curl -X POST http://<your_url>/dashboard/register \
   -H "Content-Type: application/json" \
   -d '{
         "username": "testid",
         "password": "testpw"
       }'
-# return {"status":status,"message":"message","data":{"id":"testid"}}%
+# 반환 {"status":상태,"message":"메시지","data":{"id":"테스트아이디"}}%
 ```
 ```bash
-# login
+# 로그인
 curl -X POST http://<your_url>/dashboard/login \
   -H "Content-Type: application/json" \
   -d '{
         "username": "testid",
         "password": "testpw"
       }'
-# return {"status":status,"message":"message","data":{"token":"jwt"}}%
+# 반환 {"status":상태,"message":"메시지","data":{"token":"jwt"}}%
 ```
 ```bash
-# Get Drone Data
+# 드론 데이터 가져오기
  curl -i --location --request GET 'http://<your_url>/api/dashboard/drone/<telemetry_or_event> /<testid>' \
 -H "Auth: Bearer <token>"
-# return {"data":{},"updatedAt":currentTimeMillis}%
+# 반환 {"data":{},"updatedAt":currentTimeMillis}%
 ```
-
+ 
 ---
 ## DB 가이드
 ### MYSQL DB 사용 가이드
-> MySQL 사용 가이드를 알고 싶다면 여기를 확인하세요: [DB GUIDE](https://github.com/seyun4047/drone-platform-docs/blob/main/components/server/DB_GUIDE.md)
+> MySQL 사용 가이드를 알고 싶다면, 여기를 참조하세요: [DB GUIDE](https://github.com/seyun4047/drone-platform-docs/blob/main/components/server/DB_GUIDE.md)
 ---
 
 ## 대시보드(프론트엔드) 통신
 <img height="900" alt="AWS Upload Presigned URL-2026-02-13-144904" src="https://github.com/user-attachments/assets/4e956658-5ef2-4c1d-972d-ea669aa09b67" />
-
 
 ---
 
@@ -123,41 +122,41 @@ curl -X POST http://<your_url>/dashboard/login \
 # 제조사 독립형 드론 플랫폼
 
 ---
-이것은 **제조사 독립형 통합 드론 모니터링 플랫폼**입니다.
+**제조사에 구애받지 않는 통합 드론 모니터링 플랫폼**입니다.
 
-다양한 드론을 단일 환경에서 관리할 수 있도록 설계되었으며,
-**고성능 전문 드론과 상업적으로 이용 가능한 취미용 카메라 드론 모두**를
-인명 구조 및 재난 대응에 활용할 수 있도록 합니다.
+단일 환경에서 다양한 드론을 관리하도록 설계되어,
+**고급 전문가용 드론부터 시중에서 쉽게 구할 수 있는 취미용 카메라 드론까지**
+인명 구조 및 재난 대응에 활용될 수 있도록 합니다.
 
 ---
 
 ## 프로젝트 구조
 
-이 플랫폼은 여러 개의 독립적인 저장소로 구성됩니다:
+이 플랫폼은 여러 독립적인 저장소로 구성됩니다:
 
-| Component | Description | Repository |
+| Component | Description                                       | Repository                                                              |
 |---------|---------------------------------------------------|-------------------------------------------------------------------------|
-| Server | 핵심 드론 플랫폼 서버 (API, 인증, 텔레메트리) | [GitHub](https://github.com/seyun4047/drone-platform-server) |
-| Monitoring Server | 실시간 드론 상태 점검 모니터링 서비스 | [GitHub](https://seyun4047/drone-platform-monitoring-server) |
-| Drone Data Tester | 드론 텔레메트리 및 데이터 시뮬레이션 테스트 클라이언트 | [GitHub](https://github.com/seyun4047/drone-platform-trans-tester) |
-| Drone Client | 드론 데이터 수집, 전송 및 분석 | [GitHub](https://github.com/seyun4047/drone-platform-client) |
-| Docs | 플랫폼 문서, API | [GitHub](https://github.com/seyun4047/drone-platform-docs)|
+| Server | 핵심 드론 플랫폼 서버 (API, 인증, 텔레메트리)       | [GitHub](https://github.com/seyun4047/drone-platform-server)            |
+| Monitoring Server | 실시간 드론 상태 모니터링 서비스                 | [GitHub](https://github.com/seyun4047/drone-platform-monitoring-server) |
+| Drone Data Tester | 드론 텔레메트리 및 데이터 시뮬레이션을 위한 테스트 클라이언트 | [GitHub](https://github.com/seyun4047/drone-platform-trans-tester)       |
+| Drone Client | 드론 데이터 수집, 전송 및 분석                     | [GitHub](https://github.com/seyun4047/drone-platform-client)            |
+| Docs | 플랫폼 문서, API                                  | [GitHub](https://github.com/seyun4047/drone-platform-docs)|
 
 ---
 
 ## 배경
 
-커스텀 드론, 상업용 드론, 소비자용 드론은 기본적인 제어 메커니즘을 공유하지만,
-실제 환경에서의 작동 방식과 **명령 및 제어 구조**는 상당히 다릅니다.
+커스텀 드론, 상용 드론, 소비자용 드론은 기본적인 제어 메커니즘을 공유하지만,
+실제 환경에서의 운용 방식과 **지휘 및 통제 구조**는 크게 다릅니다.
 
-실제로 드론은 종종 다음과 같은 요소에 크게 의존하는 도구로 활용됩니다:
+실제로 드론은 다음과 같은 요소에 크게 의존하는 도구로 활용되는 경우가 많습니다:
 - 특정 장비
 - 고도로 훈련된 인력
 
-최근 많은 기관과 기업이 AI 기술과 통합된 드론 시스템을 구축하려 시도했습니다.
-하지만 이러한 시스템에는 명확한 한계가 있습니다. 일반적으로 특정 드론 모델을 튜닝하거나 단일 유형의 맞춤형 드론을 운영하는 방식에 의존하여, 전문 인력과 독점 기술에 대한 강한 의존성을 초래합니다.
+최근 많은 기관과 기업이 AI 기술과 통합된 드론 시스템을 구축하려는 시도를 하고 있습니다.
+하지만 이러한 시스템에는 명확한 한계가 있습니다. 일반적으로 특정 드론 모델을 튜닝하거나 단일 유형의 맞춤 제작 드론을 운용하는 방식에 의존하여, 전문 인력과 독점 기술에 대한 의존성이 강합니다.
 
-이러한 의존성은 특히 **인명 구조 및 재난 대응 작전**에서 매우 중요합니다.
+이러한 의존성은 **인명 구조 및 재난 대응 작전**에서 특히 중요합니다.
 
 ---
 ## 프로젝트 목표
@@ -167,46 +166,46 @@ curl -X POST http://<your_url>/dashboard/login \
 ## 목표
 
 - 드론 모델이나 제조사에 관계없이 배포 가능한 드론 모니터링 및 관리 시스템
-- 복잡한 제어 절차 없이 현장에 즉시 배포할 수 있는 시스템
-- 특정 드론 하드웨어의 성능 능력에 의존하지 않는 시스템
-- 비전문 드론 취미 사용자도 비상 상황에 효과적으로 기여할 수 있는 시스템
+- 복잡한 제어 절차 없이 현장에 즉시 배치 가능한 시스템
+- 특정 드론 하드웨어의 성능에 의존하지 않는 시스템
+- 비전문가 드론 애호가도 비상 상황에서 효과적으로 기여할 수 있는 시스템
 
 ---
 
-## 예상 효과
+## 기대 효과
 
-인명 구조 및 재난 대응 시나리오에서, 전문 장비나 구조팀이 현장에 도착하기 전에
-누구나 조작할 수 있는 모든 드론을 즉시 배치하여:
-- 피해자 평가
-- 위험 식별
+인명 구조 및 재난 대응 시나리오에서, 전문 장비나 구조팀이 현장에 도착하기 전에,
+누구나 운용 가능한 드론이라면 즉시 배치하여:
+- 피해자 상태 파악
+- 위험 요소 식별
 - 피해 규모 추정
 
-이러한 중요한 **골든 타임**을 확보함으로써 시스템은 더 빠른 의사 결정을 가능하게 하고 고급 구조 자원을 더 효과적으로 배치하여 궁극적으로 더 정교하고 영향력 있는 드론 지원 비상 대응 시스템으로 이어질 수 있습니다.
+이 중요한 **골든 타임**을 확보함으로써, 시스템은 더 빠른 의사 결정과 고급 구조 자원의 보다 효과적인 배치를 가능하게 하며, 궁극적으로 더욱 정교하고 영향력 있는 드론 지원 긴급 대응 시스템으로 이어질 것입니다.
 
 ---
 
 ## 시스템 아키텍처
 
 ### 전체 시스템 아키텍처
-<img height="900" alt="AWS Upload Presigned URL-2026-02-13-154944" src="https://github.com/user-attachments/assets/b3c05ffd-6a25-47c2-9473-83fec588129b" />
+<img height="900" alt="AWS Upload Presigned URL-2026-02-13-170224" src="https://github.com/user-attachments/assets/a2cb756b-b30d-49a5-a503-64afa2519ad0" />
 
 
 ---
 
 ## 핵심 시스템 흐름
 
-| Auth Logic | Control Data From Drone |
+|                                                                           인증 로직                                                                           |                                          드론으로부터의 제어 데이터                                          |
 |:---------------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
-| <img width="450" alt="Redis Token Connection Flow-2026-02-01-182619" src="https://github.com/user-attachments/assets/cf0e6a9e-eeae-4525-aaf1-198c98e61c90" /> | <img width="450" alt="Redis Token Connection Flow-2026-02-01-182708" src="https://github.com/user-attachments/assets/a344e0c5-b12a-45ab-951c-0cefcc87bf2b" />
+|  <img width="450" alt="Redis Token Connection Flow-2026-02-01-182619" src="https://github.com/user-attachments/assets/cf0e6a9e-eeae-4525-aaf1-198c98e61c90" />  | <img width="450" alt="Redis Token Connection Flow-2026-02-01-182708" src="https://github.com/user-attachments/assets/a344e0c5-b12a-45ab-951c-0cefcc87bf2b" />
  |
-| **Redis 기반 인증 및 연결 제어 흐름.** | **인증 후 제어 및 텔레메트리 데이터 처리.** |
+|                                                   **Redis 기반 인증 및 연결 제어 흐름.**                                                   |                    **인증 후 제어 및 텔레메트리 데이터 처리.**                     |
 
-| Token Validation | Monitoring Server |
+|                                             토큰 유효성 검사                                              |                                             모니터링 서버                                             |
 |:---------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|
-| <img src="https://github.com/user-attachments/assets/456dc993-64a0-4ac8-9138-0f5446aaad07" width="450"/> |<img width="450" alt="Untitled diagram-2026-02-11-173920" src="https://github.com/user-attachments/assets/6eea1ba2-663d-4bf1-be1d-c729e3bda2f7" />|
-| **들어오는 드론 데이터에 대한 Redis 토큰 유효성 검사.** | **주기적인 드론 연결 상태 모니터링.** |
+| <img src="https://github.com/user-attachments/assets/456dc993-64a0-4ac8-9138-0f5446aaad07" width="450"/>  |<img width="450" alt="Untitled diagram-2026-02-11-173920" src="https://github.com/user-attachments/assets/6eea1ba2-663d-4bf1-be1d-c729e3bda2f7" />|
+|                          **수신 드론 데이터에 대한 Redis 토큰 유효성 검사.**                          |                              **주기적인 드론 연결 상태 모니터링.**                             |
 
-| Back-End <-> Front-End |
+| 백엔드 <-> 프론트엔드 |
 |:---:|
 | <img height="700" alt="AWS Upload Presigned URL-2026-02-13-144904" src="https://github.com/user-attachments/assets/4e956658-5ef2-4c1d-972d-ea669aa09b67" /> |
 | **백엔드 서버와 프론트엔드 대시보드 간 통신** |
