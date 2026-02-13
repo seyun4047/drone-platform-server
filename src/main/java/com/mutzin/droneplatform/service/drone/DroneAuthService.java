@@ -1,26 +1,23 @@
-package com.mutzin.droneplatform.service;
+package com.mutzin.droneplatform.service.drone;
 
-import com.mutzin.droneplatform.domain.Drone;
-import com.mutzin.droneplatform.dto.AccessResult;
-import com.mutzin.droneplatform.dto.AuthRequest;
-import com.mutzin.droneplatform.dto.AuthResponse;
-import com.mutzin.droneplatform.dto.TelemetryResponse;
+import com.mutzin.droneplatform.domain.drone.Drone;
+import com.mutzin.droneplatform.dto.drone.AccessResponse;
+import com.mutzin.droneplatform.dto.drone.DroneAuthRequest;
+import com.mutzin.droneplatform.dto.drone.DroneAuthResponse;
 import com.mutzin.droneplatform.infrastructure.accesguard.AccessGuard;
 import com.mutzin.droneplatform.infrastructure.logging.LogAppender;
 import com.mutzin.droneplatform.infrastructure.logging.LogPathCreator;
-import com.mutzin.droneplatform.repository.DroneRepository;
-import com.mutzin.droneplatform.repository.RedisTokenRepository;
-import com.mutzin.droneplatform.repository.RedisHeartbeatRepository;
+import com.mutzin.droneplatform.repository.drone.DroneRepository;
+import com.mutzin.droneplatform.repository.drone.RedisTokenRepository;
+import com.mutzin.droneplatform.repository.drone.RedisHeartbeatRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
-public class AuthService {
+public class DroneAuthService {
     public enum AuthResult {
         OK("CONNECTED"),
         DRONE_NOT_FOUND("DRONE_NOT_FOUND"),
@@ -44,7 +41,7 @@ public class AuthService {
     private final AccessGuard accessGuard;
     private final RedisHeartbeatRepository redisHeartbeatRepository;
 
-    public AuthService(DroneRepository droneRepository, RedisTokenRepository redisTokenRepository, AccessGuard accessGuard, RedisHeartbeatRepository redisHeartbeatRepository){
+    public DroneAuthService(DroneRepository droneRepository, RedisTokenRepository redisTokenRepository, AccessGuard accessGuard, RedisHeartbeatRepository redisHeartbeatRepository){
         this.droneRepository = droneRepository;
         this.redisTokenRepository = redisTokenRepository;
         this.accessGuard = accessGuard;
@@ -53,25 +50,25 @@ public class AuthService {
 
 ///     Connect Drone
     @Transactional
-    public AuthResponse connectDrone(String serial, String deviceName) {
+    public DroneAuthResponse connectDrone(String serial, String deviceName) {
 ///      1.  serial in DB?
         Optional<Drone> optionalDrone = droneRepository.findBySerial(serial);
-        if(optionalDrone.isEmpty()) return new AuthResponse(false, "DRONE_NOT_FOUND");
+        if(optionalDrone.isEmpty()) return new DroneAuthResponse(false, "DRONE_NOT_FOUND");
 
         Drone drone = optionalDrone.get();
 
 ///        2. device name == db device name?
-        if(!drone.getName().equals(deviceName)) return new AuthResponse(false, "DEVICE_NAME_MISMATCH");
+        if(!drone.getName().equals(deviceName)) return new DroneAuthResponse(false, "DEVICE_NAME_MISMATCH");
 
 ///        3. check level | 0->block 1->good
-        if(drone.getLevel()==0) return new AuthResponse(false, "DRONE_BLOCKED");
+        if(drone.getLevel()==0) return new DroneAuthResponse(false, "DRONE_BLOCKED");
 
 ///        4. Token in REDIS?
         String existingToken = redisTokenRepository.getTokenlBySerial(serial);
         if(existingToken != null) {
 ///            5. Token in REDIS but Connecting==0? -> ghost
             if(!drone.isConnecting()) redisTokenRepository.deleteBySerial(serial);
-            else return new AuthResponse(false, "DEVICE_ALREADY_CONNECTED");
+            else return new DroneAuthResponse(false, "DEVICE_ALREADY_CONNECTED");
         }
 ///        6. CREATE NEW TOKEN
         String newToken = redisTokenRepository.saveToken(serial, TOKEN_TTL_SECONDS);
@@ -85,23 +82,22 @@ public class AuthService {
         LogAppender.prepend(logPath.toString(), "CONNECT");
 ///        9. Connecting Success
         drone.setLogPath(logPath.toString());
-        drone.setUpdatedAt(LocalDateTime.now());
         droneRepository.save(drone);
         //        UPDATE HEARTBEAT
         redisHeartbeatRepository.heartbeat(serial);
-        return new AuthResponse(true, "SUCCESS_CONNECT", newToken);
+        return new DroneAuthResponse(true, "SUCCESS_CONNECT", newToken);
     }
 
 ///         Disconnect Drone
     @Transactional
-    public AuthResponse disconnect(AuthRequest authRequest) {
-        String serial = authRequest.getSerial();
-        String token = authRequest.getToken();
+    public DroneAuthResponse disconnect(DroneAuthRequest droneAuthRequest) {
+        String serial = droneAuthRequest.getSerial();
+        String token = droneAuthRequest.getToken();
         Optional<Drone> optionalDrone = droneRepository.findBySerial(serial);
 
 ///         if you don't have monitoring server->cannot use this method(It can invalid->ghost session)
         if(!token.equals(redisTokenRepository.getTokenlBySerial(serial))){
-        return new AuthResponse(false, "TOKEN INVALID", token);
+        return new DroneAuthResponse(false, "TOKEN INVALID", token);
         }
 
         if(optionalDrone.isPresent()) {
@@ -110,31 +106,31 @@ public class AuthService {
             droneRepository.save(drone);
 
             redisTokenRepository.deleteBySerial(serial);
-            return new AuthResponse(true, "DISCONNECT:"+serial, token);
+            return new DroneAuthResponse(true, "DISCONNECT:"+serial, token);
         }
         Path logPath = LogPathCreator.create("logs/", serial, true);
         LogAppender.prepend(logPath.toString(), "DISCONNECT");
-        return new AuthResponse(false, "DISCONNECT ERROR", token);
+        return new DroneAuthResponse(false, "DISCONNECT ERROR", token);
     }
 
 ///         Update Token
     @Transactional
-    public AuthResponse update(AuthRequest authRequest) {
-        if (authRequest == null ||
-                authRequest.getSerial() == null ||
-                authRequest.getToken() == null) {
-            return new AuthResponse(false, "INVALID_REQUEST");
+    public DroneAuthResponse update(DroneAuthRequest droneAuthRequest) {
+        if (droneAuthRequest == null ||
+                droneAuthRequest.getSerial() == null ||
+                droneAuthRequest.getToken() == null) {
+            return new DroneAuthResponse(false, "INVALID_REQUEST");
         }
-        String serial = authRequest.getSerial();
-        String token = authRequest.getToken();
-        AccessResult accessResult = accessGuard.handle(token, serial);
-        if (!accessResult.isSuccess()) {
-            return new AuthResponse(false, accessResult.getMessage());
+        String serial = droneAuthRequest.getSerial();
+        String token = droneAuthRequest.getToken();
+        AccessResponse AccessResponse = accessGuard.handle(token, serial);
+        if (!AccessResponse.isSuccess()) {
+            return new DroneAuthResponse(false, AccessResponse.getMessage());
         }
         String newToken = redisTokenRepository.updateTokenBySerial(serial, TOKEN_TTL_SECONDS);
         //        UPDATE HEARTBEAT
         redisHeartbeatRepository.heartbeat(serial);
-        return new AuthResponse(true, "UPDATE TOKEN", newToken);
+        return new DroneAuthResponse(true, "UPDATE TOKEN", newToken);
     }
 }
 

@@ -1,8 +1,7 @@
-package com.mutzin.droneplatform.state;
+package com.mutzin.droneplatform.state.drone;
 
-import com.mutzin.droneplatform.dto.TelemetryRequest;
+import com.mutzin.droneplatform.dto.drone.TelemetryRequest;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

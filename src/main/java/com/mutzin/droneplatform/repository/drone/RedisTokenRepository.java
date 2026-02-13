@@ -1,9 +1,8 @@
-package com.mutzin.droneplatform.repository;
+package com.mutzin.droneplatform.repository.drone;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
-
 import java.time.Duration;
 import java.util.UUID;
 

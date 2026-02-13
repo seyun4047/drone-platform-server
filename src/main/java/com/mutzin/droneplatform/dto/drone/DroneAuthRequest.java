@@ -1,9 +1,11 @@
-package com.mutzin.droneplatform.dto;
+package com.mutzin.droneplatform.dto.drone;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class AuthRequest {
+@Setter
+public class DroneAuthRequest {
     private String serial;
     private String device_name;
     private String token;
