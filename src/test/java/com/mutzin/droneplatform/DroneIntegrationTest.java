@@ -1,12 +1,12 @@
 package com.mutzin.droneplatform;
 
-import com.mutzin.droneplatform.controller.DroneAuthController;
-import com.mutzin.droneplatform.controller.TelemetryController;
+import com.mutzin.droneplatform.controller.drone.DroneAuthController;
+import com.mutzin.droneplatform.controller.drone.TelemetryController;
 import com.mutzin.droneplatform.dto.AuthResponse;
 import com.mutzin.droneplatform.dto.TelemetryRequest;
 import com.mutzin.droneplatform.dto.TelemetryResponse;
-import com.mutzin.droneplatform.service.DroneAuthService;
-import com.mutzin.droneplatform.service.TelemetryService;
+import com.mutzin.droneplatform.service.drone.DroneAuthService;
+import com.mutzin.droneplatform.service.drone.TelemetryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;

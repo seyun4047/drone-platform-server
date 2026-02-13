@@ -1,8 +1,8 @@
-package com.mutzin.droneplatform.controller;
+package com.mutzin.droneplatform.controller.drone;
 
 import com.mutzin.droneplatform.dto.AuthRequest;
 import com.mutzin.droneplatform.dto.AuthResponse;
-import com.mutzin.droneplatform.service.DroneAuthService;
+import com.mutzin.droneplatform.service.drone.DroneAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;

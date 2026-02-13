@@ -1,4 +1,4 @@
-package com.mutzin.droneplatform.service;
+package com.mutzin.droneplatform.service.drone;
 
 import com.mutzin.droneplatform.domain.Drone;
 import com.mutzin.droneplatform.dto.*;

@@ -1,4 +1,4 @@
-package com.mutzin.droneplatform.service;
+package com.mutzin.droneplatform.service.dashboard;
 
 import com.mutzin.droneplatform.dto.DroneEventResponse;
 import com.mutzin.droneplatform.dto.DroneTelemetryResponse;

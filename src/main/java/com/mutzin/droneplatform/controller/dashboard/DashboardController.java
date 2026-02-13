@@ -1,9 +1,9 @@
-package com.mutzin.droneplatform.controller;
+package com.mutzin.droneplatform.controller.dashboard;
 
 import com.mutzin.droneplatform.dto.DroneEventResponse;
 import com.mutzin.droneplatform.dto.DroneTelemetryResponse;
 import com.mutzin.droneplatform.repository.RedisHeartbeatRepository;
-import com.mutzin.droneplatform.service.DashboardService;
+import com.mutzin.droneplatform.service.dashboard.DashboardService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
