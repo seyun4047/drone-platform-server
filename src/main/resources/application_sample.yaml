@@ -11,6 +11,9 @@ server:
   port: your server port
 drone:
   ttl: 60 #sec (1min)
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 3600000
 ---
 # local
 spring:
@@ -40,3 +43,16 @@ spring:
       host: your redis host
       port: your redis port
       password: your redis password
+---
+# TEST
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect

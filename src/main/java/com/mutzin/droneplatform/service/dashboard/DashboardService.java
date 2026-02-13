@@ -1,10 +1,10 @@
 package com.mutzin.droneplatform.service.dashboard;
 
-import com.mutzin.droneplatform.dto.DroneEventResponse;
-import com.mutzin.droneplatform.dto.DroneTelemetryResponse;
-import com.mutzin.droneplatform.dto.TelemetryRequest;
-import com.mutzin.droneplatform.state.DroneEventStore;
-import com.mutzin.droneplatform.state.DroneTelemetryStore;
+import com.mutzin.droneplatform.dto.drone.DroneEventResponse;
+import com.mutzin.droneplatform.dto.drone.DroneTelemetryResponse;
+import com.mutzin.droneplatform.dto.drone.TelemetryRequest;
+import com.mutzin.droneplatform.state.drone.DroneEventStore;
+import com.mutzin.droneplatform.state.drone.DroneTelemetryStore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

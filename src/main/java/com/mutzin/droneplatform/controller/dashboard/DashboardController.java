@@ -1,8 +1,8 @@
 package com.mutzin.droneplatform.controller.dashboard;
 
-import com.mutzin.droneplatform.dto.DroneEventResponse;
-import com.mutzin.droneplatform.dto.DroneTelemetryResponse;
-import com.mutzin.droneplatform.repository.RedisHeartbeatRepository;
+import com.mutzin.droneplatform.dto.drone.DroneEventResponse;
+import com.mutzin.droneplatform.dto.drone.DroneTelemetryResponse;
+import com.mutzin.droneplatform.repository.drone.RedisHeartbeatRepository;
 import com.mutzin.droneplatform.service.dashboard.DashboardService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class DashboardController {
         this.dashboardService = dashboardService;
     }
 
-     /// find alive drones
+     /// Find alive drones
      /// @return serials
     @Operation(summary = "Alive drone")
     @GetMapping("/alive-drones")

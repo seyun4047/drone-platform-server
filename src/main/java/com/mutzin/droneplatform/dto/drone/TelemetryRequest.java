@@ -1,4 +1,4 @@
-package com.mutzin.droneplatform.dto;
+package com.mutzin.droneplatform.dto.drone;
 import lombok.Data;
 import java.util.Map;
 

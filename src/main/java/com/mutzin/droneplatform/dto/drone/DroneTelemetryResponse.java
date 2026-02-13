@@ -1,8 +1,7 @@
-package com.mutzin.droneplatform.dto;
+package com.mutzin.droneplatform.dto.drone;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 import java.util.Map;
 
 @Getter

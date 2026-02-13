@@ -1,7 +1,7 @@
 package com.mutzin.droneplatform.controller.drone;
 
-import com.mutzin.droneplatform.dto.TelemetryRequest;
-import com.mutzin.droneplatform.dto.TelemetryResponse;
+import com.mutzin.droneplatform.dto.drone.TelemetryRequest;
+import com.mutzin.droneplatform.dto.drone.TelemetryResponse;
 import com.mutzin.droneplatform.service.drone.TelemetryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

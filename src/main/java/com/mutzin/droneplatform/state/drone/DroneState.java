@@ -1,8 +1,7 @@
-package com.mutzin.droneplatform.state;
+package com.mutzin.droneplatform.state.drone;
 
 import lombok.Builder;
 import lombok.Getter;
-
 import java.util.Map;
 
 @Getter
