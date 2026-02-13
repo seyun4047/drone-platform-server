@@ -25,10 +25,11 @@ public class AuthService {
         if (memberRepository.existsByUsername(username)) {
             return new AuthResponse(false, "USERNAME_ALREADY_EXISTS", null);
         }
-
+        //0: REJECT 1: PENDING 2: ACCESS
         Member member = Member.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
+                .state(1)
                 .role("USER")
                 .build();
 
@@ -42,10 +43,18 @@ public class AuthService {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
-//            Gen Token with username
+            Member member = memberRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("Member not found"));
+
+            // Check User's State
+            //0: REJECT 1: PENDING 2: ACCESS
+            if (member.getState() == 1) {
+                return new AuthResponse(false, "ACCOUNT_PENDING_APPROVAL", null);}
+            if (member.getState() == 0) {
+                return new AuthResponse(false, "ACCOUNT_REJECTED", null);}
+            // Gen Token with username
             String token = jwtUtil.generateToken(username);
             return new AuthResponse(true, "LOGIN_SUCCESSFUL", Map.of("token", token));
-
         } catch (Exception e) {
             return new AuthResponse(false, "INVALID_USERNAME_OR_PASSWORD", null);
         }

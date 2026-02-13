@@ -24,4 +24,7 @@ public class Member {
     private String password;
 
     private String role;
+
+//0: REJECT 1: PENDING 2: ACCESS
+    private Integer state;
 }
