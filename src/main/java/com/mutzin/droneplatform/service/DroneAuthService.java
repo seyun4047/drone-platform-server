@@ -14,10 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
-public class AuthService {
+public class DroneAuthService {
     public enum AuthResult {
         OK("CONNECTED"),
         DRONE_NOT_FOUND("DRONE_NOT_FOUND"),
@@ -41,7 +40,7 @@ public class AuthService {
     private final AccessGuard accessGuard;
     private final RedisHeartbeatRepository redisHeartbeatRepository;
 
-    public AuthService(DroneRepository droneRepository, RedisTokenRepository redisTokenRepository, AccessGuard accessGuard, RedisHeartbeatRepository redisHeartbeatRepository){
+    public DroneAuthService(DroneRepository droneRepository, RedisTokenRepository redisTokenRepository, AccessGuard accessGuard, RedisHeartbeatRepository redisHeartbeatRepository){
         this.droneRepository = droneRepository;
         this.redisTokenRepository = redisTokenRepository;
         this.accessGuard = accessGuard;

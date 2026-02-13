@@ -1,11 +1,11 @@
 package com.mutzin.droneplatform;
 
-import com.mutzin.droneplatform.controller.AuthController;
+import com.mutzin.droneplatform.controller.DroneAuthController;
 import com.mutzin.droneplatform.controller.TelemetryController;
 import com.mutzin.droneplatform.dto.AuthResponse;
 import com.mutzin.droneplatform.dto.TelemetryRequest;
 import com.mutzin.droneplatform.dto.TelemetryResponse;
-import com.mutzin.droneplatform.service.AuthService;
+import com.mutzin.droneplatform.service.DroneAuthService;
 import com.mutzin.droneplatform.service.TelemetryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest({AuthController.class, TelemetryController.class})
+@WebMvcTest({DroneAuthController.class, TelemetryController.class})
 @AutoConfigureMockMvc(addFilters = false)
 public class DroneIntegrationTest {
 
@@ -29,7 +29,7 @@ public class DroneIntegrationTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private AuthService authService;
+    private DroneAuthService droneAuthService;
 
     @MockitoBean
     private TelemetryService telemetryService;
@@ -47,7 +47,7 @@ public class DroneIntegrationTest {
     @Test
     void connectTest() throws Exception {
         AuthResponse connectRes = new AuthResponse(true, "SUCCESS_CONNECT", TOKEN);
-        when(authService.connectDrone(SERIAL, DRONE_NAME)).thenReturn(connectRes);
+        when(droneAuthService.connectDrone(SERIAL, DRONE_NAME)).thenReturn(connectRes);
 
         mockMvc.perform(post("/auth/connect")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -121,7 +121,7 @@ public class DroneIntegrationTest {
         );
 
         AuthResponse updateRes = new AuthResponse(true, "UPDATE TOKEN", TOKEN);
-        when(authService.update(any())).thenReturn(updateRes);
+        when(droneAuthService.update(any())).thenReturn(updateRes);
 
         mockMvc.perform(post("/auth/update")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -143,7 +143,7 @@ public class DroneIntegrationTest {
         );
 
         AuthResponse disconnectRes = new AuthResponse(true, "DISCONNECT:" + SERIAL, TOKEN);
-        when(authService.disconnect(any())).thenReturn(disconnectRes);
+        when(droneAuthService.disconnect(any())).thenReturn(disconnectRes);
 
         mockMvc.perform(post("/auth/disconnect")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -2,7 +2,7 @@ package com.mutzin.droneplatform.controller;
 
 import com.mutzin.droneplatform.dto.AuthRequest;
 import com.mutzin.droneplatform.dto.AuthResponse;
-import com.mutzin.droneplatform.service.AuthService;
+import com.mutzin.droneplatform.service.DroneAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -13,19 +13,19 @@ import org.springframework.web.bind.annotation.*;
 ///  - Handles initial connection requests from drones.
 ///  - Manages drone disconnection and cleans up server-side connection state.
 ///
-///  All business logic is delegated to AuthService.
+///  All business logic is delegated to DroneAuthService.
 ///  This controller focuses only on HTTP request and response handling.
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "Authentication")
-public class AuthController {
-    private final AuthService authService;
-    /// Constructor-based dependency injection for AuthService.
-    /// @param authService service that handles drone authentication
+public class DroneAuthController {
+    private final DroneAuthService droneAuthService;
+    /// Constructor-based dependency injection for DroneAuthService.
+    /// @param droneAuthService service that handles drone authentication
     /// and connection-related business logic
 
-    public AuthController(AuthService authService){
-        this.authService = authService;
+    public DroneAuthController(DroneAuthService droneAuthService){
+        this.droneAuthService = droneAuthService;
     }
 
     /// Handles drone connection requests.
@@ -40,7 +40,7 @@ public class AuthController {
     public ResponseEntity<AuthResponse> connect(@RequestBody AuthRequest authRequest) {
         try {
             AuthResponse result =
-                    authService.connectDrone(authRequest.getSerial(), authRequest.getDevice_name());
+                    droneAuthService.connectDrone(authRequest.getSerial(), authRequest.getDevice_name());
             System.out.println(result);
             return ResponseEntity.ok(result);
 
@@ -65,7 +65,7 @@ public class AuthController {
     @PostMapping("/disconnect")
     public ResponseEntity<AuthResponse> disconnect(@RequestBody AuthRequest authRequest) {
         try {
-            AuthResponse result = authService.disconnect(authRequest);
+            AuthResponse result = droneAuthService.disconnect(authRequest);
             System.out.println(result);
             return ResponseEntity.ok(result);
 
@@ -90,7 +90,7 @@ public class AuthController {
     @PostMapping("/update")
     public ResponseEntity<AuthResponse> update(@RequestBody AuthRequest authRequest) {
         try {
-            AuthResponse result = authService.update(authRequest);
+            AuthResponse result = droneAuthService.update(authRequest);
             System.out.println(result);
             return ResponseEntity.ok(result);
 
