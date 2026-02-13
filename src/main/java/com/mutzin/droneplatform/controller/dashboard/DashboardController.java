@@ -5,6 +5,7 @@ import com.mutzin.droneplatform.dto.drone.DroneTelemetryResponse;
 import com.mutzin.droneplatform.repository.drone.RedisHeartbeatRepository;
 import com.mutzin.droneplatform.service.dashboard.DashboardService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -25,6 +26,7 @@ public class DashboardController {
 
      /// Find alive drones
      /// @return serials
+    @Tag(name = "GET ALIVE DRONES")
     @Operation(summary = "Alive drone")
     @GetMapping("/alive-drones")
     public Set<String> getAliveDrones() {
@@ -33,6 +35,7 @@ public class DashboardController {
 
     /// Get drone's Event data
     /// @return {"data":{},"updatedAt":currentTimeMillis}%
+    @Tag(name = "GET TELEMETRY DATA")
     @Operation(summary = "Drone's Event Data")
     @GetMapping("/drone/event/{serial}")
     public DroneEventResponse getDroneEventData(@PathVariable String serial) {
@@ -41,6 +44,7 @@ public class DashboardController {
     }
     /// Get drone's Event data
     /// @return {"data":{},"updatedAt":currentTimeMillis}%
+    @Tag(name = "GET EVENT DATA")
     @Operation(summary = "Drone's Event Data")
     @GetMapping("/drone/telemetry/{serial}")
     public DroneTelemetryResponse getDroneTelemetryData(@PathVariable String serial) {

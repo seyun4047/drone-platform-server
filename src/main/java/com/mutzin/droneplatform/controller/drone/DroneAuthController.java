@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 ///  This controller focuses only on HTTP request and response handling.
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Authentication")
+@Tag(name = "DRONE AUTHENTICATION")
 public class DroneAuthController {
     private final DroneAuthService droneAuthService;
     /// Constructor-based dependency injection for DroneAuthService.

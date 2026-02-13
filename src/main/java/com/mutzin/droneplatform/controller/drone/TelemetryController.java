@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-@Tag(name = "Telemetry")
+@Tag(name = "TELEMETRY")
 public class TelemetryController {
 
     /// Constructor-based dependency injection for TelemetryService.
