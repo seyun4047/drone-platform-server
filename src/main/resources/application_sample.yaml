@@ -62,3 +62,6 @@ spring:
     password:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+  app:
+    cors:
+      allowed-origin: your front end url
