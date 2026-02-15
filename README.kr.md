@@ -2,7 +2,6 @@
 
 ---
 
-```markdown
 # 드론 플랫폼 서버
 
 ---
@@ -41,6 +40,7 @@
 ---
 ## 사용법
 ### 로컬 빌드
+
 ```bash
 # Export env
 export $(cat .env | xargs)
