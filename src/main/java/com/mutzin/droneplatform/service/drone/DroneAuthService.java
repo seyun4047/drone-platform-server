@@ -7,6 +7,7 @@ import com.mutzin.droneplatform.dto.drone.DroneAuthResponse;
 import com.mutzin.droneplatform.infrastructure.accesguard.AccessGuard;
 import com.mutzin.droneplatform.infrastructure.logging.LogAppender;
 import com.mutzin.droneplatform.infrastructure.logging.LogPathCreator;
+import com.mutzin.droneplatform.infrastructure.aws.S3StsClient;
 import com.mutzin.droneplatform.repository.drone.DroneRepository;
 import com.mutzin.droneplatform.repository.drone.RedisTokenRepository;
 import com.mutzin.droneplatform.repository.drone.RedisHeartbeatRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -40,12 +42,14 @@ public class DroneAuthService {
     private final long TOKEN_TTL_SECONDS = 3600;
     private final AccessGuard accessGuard;
     private final RedisHeartbeatRepository redisHeartbeatRepository;
+    private final S3StsClient s3StsClient;
 
-    public DroneAuthService(DroneRepository droneRepository, RedisTokenRepository redisTokenRepository, AccessGuard accessGuard, RedisHeartbeatRepository redisHeartbeatRepository){
+    public DroneAuthService(DroneRepository droneRepository, RedisTokenRepository redisTokenRepository, AccessGuard accessGuard, RedisHeartbeatRepository redisHeartbeatRepository, S3StsClient s3StsClient){
         this.droneRepository = droneRepository;
         this.redisTokenRepository = redisTokenRepository;
         this.accessGuard = accessGuard;
         this.redisHeartbeatRepository = redisHeartbeatRepository;
+        this.s3StsClient = s3StsClient;
     }
 
 ///     Connect Drone
@@ -70,6 +74,13 @@ public class DroneAuthService {
             if(!drone.isConnecting()) redisTokenRepository.deleteBySerial(serial);
             else return new DroneAuthResponse(false, "DEVICE_ALREADY_CONNECTED");
         }
+
+///         STS client
+        Map<String, Object> newSts = s3StsClient.getTemporaryCredentials(serial);
+        if(newSts == null){
+            return new DroneAuthResponse(false, "S3_STS_ERROR");
+        };
+
 ///        6. CREATE NEW TOKEN
         String newToken = redisTokenRepository.saveToken(serial, TOKEN_TTL_SECONDS);
 
@@ -85,7 +96,7 @@ public class DroneAuthService {
         droneRepository.save(drone);
         //        UPDATE HEARTBEAT
         redisHeartbeatRepository.heartbeat(serial);
-        return new DroneAuthResponse(true, "SUCCESS_CONNECT", newToken);
+        return new DroneAuthResponse(true, "SUCCESS_CONNECT", newToken, newSts);
     }
 
 ///         Disconnect Drone
