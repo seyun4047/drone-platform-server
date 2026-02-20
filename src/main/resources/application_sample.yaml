@@ -14,6 +14,18 @@ drone:
 jwt:
   secret: ${JWT_SECRET}
   expiration: 3600000
+
+aws:
+  access:
+    key-id: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}
+  s3:
+    role-arn: ${S3_SERVER_ROLE}
+    region: ${S3_SERVER_REGION}
+    bucket-name: ${S3_BUCKET_NAME}
+    sts-duration-seconds: 600
+
+---
 ---
 # local
 spring:
