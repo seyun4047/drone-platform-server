@@ -26,7 +26,6 @@ aws:
     sts-duration-seconds: 600
 
 ---
----
 # local
 spring:
   config:
