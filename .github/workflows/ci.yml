@@ -16,7 +16,7 @@ jobs:
 
       - name: Copy sample files
         run: |
-          cp src/main/resources/application_sample.yaml src/main/resources/application.yaml
+          cp src/main/resources/application_sample.yaml application.yaml
           cp compose_sample.yaml compose.yaml
 
       - name: Create .env from repository secrets
@@ -32,16 +32,17 @@ jobs:
           echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
           echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
+      
 
       - name: Build Docker images
-        run: docker-compose -f compose.yaml build
+        run: docker compose -f compose.yaml build
 
       - name: Run Docker containers
-        run: docker-compose -f compose.yaml up -d
+        run: docker compose -f compose.yaml up -d
 
       - name: List running containers
         run: docker ps
 
       - name: Stop and remove containers
         if: always()
-        run: docker-compose -f compose.yaml down
+        run: docker compose -f compose.yaml down
