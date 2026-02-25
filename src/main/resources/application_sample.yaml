@@ -8,7 +8,7 @@ spring:
     compose:
       enabled: false # local-> false docker->true
 server:
-  port: your server port
+  port: 8080 #your server port
 drone:
   ttl: 60 #sec (1min)
 jwt:
@@ -51,12 +51,14 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    url: your sql source
+    url: jdbc:mysql://${MYSQL_HOST:mysql}:3306/${MYSQL_DATABASE:drone}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
   data:
     redis:
-      host: your redis host
-      port: your redis port
-      password: your redis password
+      host: ${REDIS_HOST:redis}
+      port: 6379
+      password: ${REDIS_PASSWORD}
   app:
     cors:
       allowed-origin: your front end url
