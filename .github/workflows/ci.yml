@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "APP_PORT=${{ secrets.APP_PORT }}" >> .env
           echo "DOCKER_IMAGE_NAME=${{ secrets.DOCKER_IMAGE_NAME }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
           echo "S3_SERVER_ROLE=${{ secrets.S3_SERVER_ROLE }}" >> .env
