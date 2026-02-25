@@ -1,4 +1,4 @@
-name: SPRING SERVER CI
+name: Docker Build CI
 
 on:
   push:
@@ -7,28 +7,19 @@ on:
     branches: [ "dev", "main"]
 
 jobs:
-  ci:
+  docker-ci:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Setup JDK 25
-        uses: actions/setup-java@v3
-        with:
-          distribution: temurin
-          java-version: 25
-
-      - name: Grant Gradle execution
-        run: chmod +x gradlew
 
       - name: Copy sample files
         run: |
-          cp src/main/resources/application_sample.yaml application.yaml
-          cp compose_sample.yaml compose.yml
+          cp src/main/resources/application_sample.yaml src/main/resources/application.yaml
+          cp compose_sample.yaml compose.yaml
 
-      - name: Create .env from secrets
+      - name: Create .env from repository secrets
         run: |
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > .env
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
@@ -42,11 +33,15 @@ jobs:
           echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
 
-      - name: Run Spring Tests
-        run: ./gradlew test
+      - name: Build Docker images
+        run: docker-compose -f compose.yaml build
 
-      - name: Build Project
-        run: ./gradlew build -x test
+      - name: Run Docker containers
+        run: docker-compose -f compose.yaml up -d
 
-      - name: Docker Build Test
-        run: docker build -t drone-platform:test .
+      - name: List running containers
+        run: docker ps
+
+      - name: Stop and remove containers
+        if: always()
+        run: docker-compose -f compose.yaml down
